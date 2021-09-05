@@ -1,52 +1,47 @@
-#! /usr/bin/env python
-#-*- coding:utf-8 -*-
-'''
-Description: Brief introduction of this file.
-Version: V 0.0
-Author: Yuntian Li
-Date: 2021-08-29 20:02:33
-LastEditTime: 2021-08-29 20:11:01
-LastEditors: Yuntian Li
-Copyright(C): NRIET, Nanjing, China 
-'''
+# -*- coding:utf-8 -*-
+# Description: Brief introduction of this file.
+# Version: V 0.0
+# Author: Yuntian Li
+# Date: 2021-08-29 20:02:33
+# LastEditTime: 2021-09-04 20:33:54
+# LastEditors: Yuntian Li
+# Copyright(C): NRIET, Nanjing, China 
+
+# squish modules
 import squish
 import objectMap
 
-class ScriptStatement:
-    #################### Variables ##################
-    name_ = ""
-    args_ = []
-    
+class ScriptStatement:  
     #################### Functions ##################
     def __init__(self, name):
         self.name_ = name
         self.args_ = []
         
     def addArg_(self, value):
-        self.args_.push(value)
+        self.args_.append(str(value))
     
     def addStringArg_(self, valueStr : str):
-        escapedValue = ""
-        
+        escapedValue = ""   
         for tmp in valueStr:
             if (tmp == "\\"):
                 escapedValue += "\\\\"
             elif (tmp == "\""):
                 escapedValue += "\\\""
             else:
-                escapedValue += value
+                escapedValue += tmp
             
         self.addArg_("\"" + escapedValue + "\"")
     
     def toString_(self):
+        # make sure all args are Python str
+#         args = [str(i) for i in self.args_]
+        
         seperator = ','
-        tmpStr = name + '(' + seperator.join(self.args_) + ')'
+        tmpStr = self.name_ + '(' + seperator.join(self.args_) + ')'
          
         return tmpStr
     
 class RawStatement:
-    #################### Variables ##################
-    code_ = ""
     #################### Functions ##################
     def __init__(self, code):
         self.code_ = code
@@ -54,8 +49,8 @@ class RawStatement:
     def toString_(self):
         return self.code_
     
-def MakeWaitStatement(obj):
-    tmp = ScriptStatement("waitForObject")
+def makeWaitStatement(obj):
+    tmp = ScriptStatement("squish.waitForObject")
     objRealName = objectMap.realName(obj)
     
     if(objRealName == ""):
